@@ -6,27 +6,32 @@ namespace LogAn.UnitTests
     [TestFixture]
     public class LogAnalyzerTests
     {
+        private LogAnalyzer _logAnalyzer;
+
+        [SetUp]
+        public void Setup()
+        {
+            _logAnalyzer = new LogAnalyzer();
+        }
+        
         [Test]
         public void IsValidFileName_BadExtension_ReturnsFalse()
         {
-            var logAnalyzer = new LogAnalyzer();
-            bool result = logAnalyzer.IsValidLogFileName("filewithbadextension.foo");
+            bool result = _logAnalyzer.IsValidLogFileName("filewithbadextension.foo");
             Assert.False(result);
         }
 
         [Test]
         public void IsValidFileName_GoodExtensionLowercase_ReturnsTrue()
         {
-            var logAnalyzer = new LogAnalyzer();
-            bool result = logAnalyzer.IsValidLogFileName("filewithgoodextension.slf");
+            bool result = _logAnalyzer.IsValidLogFileName("filewithgoodextension.slf");
             Assert.True(result);
         }
 
         [Test]
         public void IsValidFileName_GoodExtensionUppercase_ReturnsTrue()
         {
-            var logAnalyzer = new LogAnalyzer();
-            bool result = logAnalyzer.IsValidLogFileName("filewithgoodextension.SLF");
+            bool result = _logAnalyzer.IsValidLogFileName("filewithgoodextension.SLF");
             Assert.True(result);
         }
 
@@ -35,8 +40,7 @@ namespace LogAn.UnitTests
         [TestCase("filewithgoodextension.slf")]
         public void IsValidFileName_ValidExtensions_ReturnsTrue(string file)
         {
-            var logAnalyzer = new LogAnalyzer();
-            bool result = logAnalyzer.IsValidLogFileName(file);
+            bool result = _logAnalyzer.IsValidLogFileName(file);
             Assert.True(result);
         }
 
@@ -46,9 +50,14 @@ namespace LogAn.UnitTests
         [TestCase("filewithbadextension.foo", false)]
         public void IsValidFileName_VariousExtensions_ChecksThem(string file, bool expected)
         {
-            var logAnalyzer = new LogAnalyzer();
-            bool result = logAnalyzer.IsValidLogFileName(file);
+            bool result = _logAnalyzer.IsValidLogFileName(file);
             Assert.AreEqual(expected, result);
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _logAnalyzer = null;
         }
     }
 }
