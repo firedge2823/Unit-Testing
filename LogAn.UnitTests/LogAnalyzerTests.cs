@@ -6,7 +6,7 @@ namespace LogAn.UnitTests
     [TestFixture]
     public class LogAnalyzerTests
     {
-        private LogAnalyzer _logAnalyzer = null;
+        private LogAnalyzer _logAnalyzer;
 
         [SetUp]
         public void Setup()
