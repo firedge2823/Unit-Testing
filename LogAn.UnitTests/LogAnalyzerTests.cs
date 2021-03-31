@@ -6,32 +6,36 @@ namespace LogAn.UnitTests
     [TestFixture]
     public class LogAnalyzerTests
     {
-        private LogAnalyzer _logAnalyzer;
+        // private LogAnalyzer _logAnalyzer;
 
-        [SetUp]
-        public void Setup()
-        {
-            _logAnalyzer = new LogAnalyzer();
-        }
+        // 隨著程式的成長與變化，setup方法之後的測試方法會變得難以閱讀
+        // [SetUp]
+        // public void Setup()
+        // {
+        //     _logAnalyzer = new LogAnalyzer();
+        // }
         
         [Test]
         public void IsValidFileName_BadExtension_ReturnsFalse()
         {
-            bool result = _logAnalyzer.IsValidLogFileName("filewithbadextension.foo");
+            LogAnalyzer logAnalyzer = MakeAnalyzer();
+            bool result = logAnalyzer.IsValidLogFileName("filewithbadextension.foo");
             Assert.False(result);
         }
 
         [Test]
         public void IsValidFileName_GoodExtensionLowercase_ReturnsTrue()
         {
-            bool result = _logAnalyzer.IsValidLogFileName("filewithgoodextension.slf");
+            LogAnalyzer logAnalyzer = MakeAnalyzer();
+            bool result = logAnalyzer.IsValidLogFileName("filewithgoodextension.slf");
             Assert.True(result);
         }
 
         [Test]
         public void IsValidFileName_GoodExtensionUppercase_ReturnsTrue()
         {
-            bool result = _logAnalyzer.IsValidLogFileName("filewithgoodextension.SLF");
+            LogAnalyzer logAnalyzer = MakeAnalyzer();
+            bool result = logAnalyzer.IsValidLogFileName("filewithgoodextension.SLF");
             Assert.True(result);
         }
 
@@ -40,7 +44,8 @@ namespace LogAn.UnitTests
         [TestCase("filewithgoodextension.slf")]
         public void IsValidFileName_ValidExtensions_ReturnsTrue(string file)
         {
-            bool result = _logAnalyzer.IsValidLogFileName(file);
+            LogAnalyzer logAnalyzer = MakeAnalyzer();
+            bool result = logAnalyzer.IsValidLogFileName(file);
             Assert.True(result);
         }
 
@@ -50,15 +55,50 @@ namespace LogAn.UnitTests
         [TestCase("filewithbadextension.foo", false)]
         public void IsValidFileName_VariousExtensions_ChecksThem(string file, bool expected)
         {
-            bool result = _logAnalyzer.IsValidLogFileName(file);
+            LogAnalyzer logAnalyzer = MakeAnalyzer();
+            bool result = logAnalyzer.IsValidLogFileName(file);
             Assert.AreEqual(expected, result);
         }
 
-        [TearDown]
-        public void TearDown()
+        /// <summary>
+        /// NUnit 3: ExpectedException was removed because it encourages bad practices and it was generally felt that removing it helped developers fall into the pit of success.
+        /// </summary>
+        // [Test]
+        // [ExpectedException(typeof(ArgumentException), 
+        //     ExceptedMessage = "filename has to be provided")]
+        // public void IsValidFileName_EmptyFileName_ThrowsExceptions()
+        // {
+        //     LogAnalyzer logAnalyzer = MakeAnalyzer();
+        //     logAnalyzer.IsValidLogFileName(string.Empty);
+        // }
+        
+        [Test]
+        public void IsValidFileName_EmptyFileName_ThrowsExceptions()
         {
-            // 反模式
-            // _logAnalyzer = null;
+            LogAnalyzer logAnalyzer = MakeAnalyzer();
+            var ex = Assert.Catch<ArgumentException>(() => logAnalyzer.IsValidLogFileName(""));
+            StringAssert.Contains("filename has to be provided", ex.Message);
         }
+        
+        [Test]
+        public void IsValidFileName_EmptyFileName_ThrowsExceptions_Fluent()
+        {
+            LogAnalyzer logAnalyzer = MakeAnalyzer();
+            var ex = Assert.Catch<ArgumentException>(() => logAnalyzer.IsValidLogFileName(""));
+            Assert.That(ex.Message, Does.Contain("filename has to be provided"));
+        }
+        
+        // 工廠方法
+        private LogAnalyzer MakeAnalyzer()
+        {
+            return new LogAnalyzer();
+        }
+
+        // [TearDown]
+        // public void TearDown()
+        // {
+        //     // 反模式
+        //     // _logAnalyzer = null;
+        // }
     }
 }
