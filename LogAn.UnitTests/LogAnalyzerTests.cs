@@ -57,7 +57,8 @@ namespace LogAn.UnitTests
         [TearDown]
         public void TearDown()
         {
-            _logAnalyzer = null;
+            // 反模式
+            // _logAnalyzer = null;
         }
     }
 }
