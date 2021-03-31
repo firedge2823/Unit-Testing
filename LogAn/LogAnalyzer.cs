@@ -6,6 +6,7 @@ namespace LogAn
     {
         public bool IsValidLogFileName(string fileName)
         {
+            WasLastFileNameValid = false;
             if (string.IsNullOrEmpty(fileName))
             {
                 throw new ArgumentException("filename has to be provided");
@@ -16,7 +17,11 @@ namespace LogAn
                 return false;
             }
 
+            WasLastFileNameValid = true;
+
             return true;
         }
+
+        public bool WasLastFileNameValid { get; set; }
     }
 }

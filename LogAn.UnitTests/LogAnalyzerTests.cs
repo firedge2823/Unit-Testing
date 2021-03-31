@@ -94,6 +94,15 @@ namespace LogAn.UnitTests
             return new LogAnalyzer();
         }
 
+        [TestCase("badname.foo", false)]
+        [TestCase("badname.slf", true)]
+        public void IsValidLogFileName_WhenCalled_ChangesWasLastFileNameValid(string file, bool excpected)
+        {
+            var logAnalyzer = MakeAnalyzer();
+            logAnalyzer.IsValidLogFileName(file);
+            Assert.AreEqual(excpected, logAnalyzer.WasLastFileNameValid);
+        }
+
         // [TearDown]
         // public void TearDown()
         // {
